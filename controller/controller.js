@@ -40,9 +40,22 @@ module.exports = function(app) {
         });
     });
 
+    //Route to clear db
+    app.get('/clear', function(req, res) {
+        db.Article.remove({}, function(err, doc) {
+            if(err) {
+                console.log(err);
+            }
+            else {
+                console.log('removed all articles');
+                res.redirect('/');
+            }
+        })
+    })
+
     //Route to get all objects in json
     app.get('/articles', function(req, res) {
-        db.Article.find({})
+        db.Article.find({saved: false})
             .then(function(dbArticle) {
                 res.json(dbArticle);
             })
@@ -50,6 +63,26 @@ module.exports = function(app) {
             res.json(err);
         });
     });
+
+    app.get('/savedArticles', function(req, res) {
+        db.Article.find({saved: true})
+            .then(function(dbArticle) {
+                res.json(dbArticle);
+            })
+            .catch(function(err) {
+                res.json(err);
+        });
+    });
+
+    app.get('/deleteArticle/:id', function(req, res) {
+        db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: false })
+        .then(function(dbArticle) {
+            res.json(dbArticle);
+        })
+        .catch(function(err) {
+            res.json(err)
+        })
+    })
 
     app.get('/articles/:id', function(req, res) {
         db.Article.findOne({ _id: req.params.id })
@@ -61,6 +94,7 @@ module.exports = function(app) {
                 res.json(err);
             });
     });
+
 
     app.post('/articles/:id', function(req, res) {
         db.Note.create(req.body)
@@ -74,6 +108,12 @@ module.exports = function(app) {
             res.json(err);
         });
     });
+
+    app.post('/savedArticles/:id', function(req, res) {
+        db.Article.findOneAndUpdate({_id: req.params.id}, {saved: true}).then(function( dbRes) {
+            res.redirect('/')
+        })
+    })
 
 
     //Route to render home page

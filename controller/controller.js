@@ -10,7 +10,8 @@ var db = require('../models');
 module.exports = function(app) {
     app.use(logger('dev'));
     //Connection to database
-    mongoose.connect('mongodb://localhost/nytScrapper');
+    var MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/nytScrapper';
+    mongoose.connect(MONGODB_URI);
 
     //ROUTES
     //================================================================

@@ -4,7 +4,7 @@ var axios = require('axios');
 var cheerio = require('cheerio');
 
 //Require Database
-var db = require('../models');
+var db = require('../models/index');
 
 
 module.exports = function(app) {

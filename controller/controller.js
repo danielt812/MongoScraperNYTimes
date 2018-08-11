@@ -4,10 +4,11 @@ var axios = require('axios');
 var cheerio = require('cheerio');
 
 //Require Database
-var db = require('../models/index');
+
 
 
 module.exports = function(app) {
+    var db = require('../models/index');
     app.use(logger('dev'));
     //Connection to database
     var MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/nytScrapper';
